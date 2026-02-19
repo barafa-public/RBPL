@@ -4,11 +4,68 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Login</title>
-  <link rel="stylesheet" href="/customer/css/login.css" />
+  <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 </head>
 <body>
 
+  <div class="bg-overlay"></div>
+
+  <div class="phone-wrapper">
+    <div class="card">
+
+      <div class="logo-wrap">
+        <div class="logo">
+          <i class="fa-solid fa-bag-shopping"></i>
+        </div>
+      </div>
+
+      <h1 class="title">Selamat Datang</h1>
+      <p class="subtitle">Masuk ke akun konsumen Anda</p>
+
+      <div class="form-group">
+        <label>Username</label>
+        <div class="input-wrap">
+          <i class="fa-regular fa-user icon-left"></i>
+          <input type="text" placeholder="Masukkan Username" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Password</label>
+        <div class="input-wrap">
+          <i class="fa-solid fa-lock icon-left"></i>
+          <input type="password" id="passwordInput" placeholder="Masukkan Password" />
+          <i class="fa-regular fa-eye icon-right" id="togglePassword"></i>
+        </div>
+        <div class="forgot">
+          <a href="#">Lupa Password?</a>
+        </div>
+      </div>
+
+      <button class="btn-masuk">Masuk</button>
+
+      <p class="register-text">
+        Belum punya akun? <a href="#">Daftar Sekarang</a>
+      </p>
+
+      <div class="divider">
+        <span>atau masuk dengan</span>
+      </div>
+
+      <div class="social-buttons">
+        <button class="social-btn">
+          <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" width="20"/>
+          Google
+        </button>
+        <button class="social-btn">
+          <img src="https://www.svgrepo.com/show/475647/facebook-color.svg" alt="Facebook" width="20"/>
+          Facebook
+        </button>
+      </div>
+
+    </div>
+  </div>
 </body>
 </html>
