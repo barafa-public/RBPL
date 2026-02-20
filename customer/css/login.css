@@ -7,49 +7,14 @@
 body {
   font-family: 'Nunito', sans-serif;
   min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #a8edbc;
-  position: relative;
-  overflow: hidden;
-}
-
-/* Background blur overlay simulasi gambar */
-.bg-overlay {
-  position: fixed;
-  inset: 0;
   background: linear-gradient(160deg, #3ab87a 0%, #76d8a0 40%, #b2f0cb 100%);
-  z-index: 0;
 }
 
-.bg-overlay::before {
-  content: '';
-  position: absolute;
-  top: -60px;
-  left: -40px;
-  width: 300px;
-  height: 200px;
-  background: rgba(0,0,0,0.15);
-  border-radius: 50%;
-  filter: blur(40px);
-}
-
-/* Wrapper untuk tampilan mobile di desktop */
-.phone-wrapper {
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  max-width: 420px;
-  padding: 16px;
-}
-
-/* Card putih */
+/* Card memenuhi seluruh layar */
 .card {
   background: #ffffff;
-  border-radius: 28px;
-  padding: 36px 28px 32px;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+  min-height: 100vh;
+  padding: 60px 24px 32px;
   animation: slideUp 0.4s ease;
 }
 
@@ -66,22 +31,21 @@ body {
 }
 
 .logo {
-  width: 60px;
-  height: 60px;
+  width: 64px;
+  height: 64px;
   background: #3ab87a;
-  border-radius: 16px;
+  border-radius: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
-  font-size: 26px;
+  font-size: 28px;
   box-shadow: 0 4px 16px rgba(58, 184, 122, 0.4);
 }
 
-/* Judul */
 .title {
   text-align: center;
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 800;
   color: #1a1a1a;
   margin-bottom: 4px;
@@ -89,19 +53,18 @@ body {
 
 .subtitle {
   text-align: center;
-  font-size: 13.5px;
+  font-size: 14px;
   color: #888;
-  margin-bottom: 24px;
+  margin-bottom: 28px;
 }
 
-/* Form group */
 .form-group {
-  margin-bottom: 16px;
+  margin-bottom: 18px;
 }
 
 .form-group label {
   display: block;
-  font-size: 13.5px;
+  font-size: 14px;
   font-weight: 700;
   color: #333;
   margin-bottom: 6px;
@@ -115,10 +78,10 @@ body {
 
 .input-wrap input {
   width: 100%;
-  padding: 12px 40px 12px 40px;
+  padding: 13px 42px 13px 42px;
   border: 1.5px solid #e8e8e8;
   border-radius: 12px;
-  font-size: 14px;
+  font-size: 15px;
   font-family: 'Nunito', sans-serif;
   color: #333;
   background: #fafafa;
@@ -156,7 +119,6 @@ body {
   color: #3ab87a;
 }
 
-/* Lupa password */
 .forgot {
   text-align: right;
   margin-top: 6px;
@@ -169,19 +131,14 @@ body {
   text-decoration: none;
 }
 
-.forgot a:hover {
-  text-decoration: underline;
-}
-
-/* Tombol masuk */
 .btn-masuk {
   width: 100%;
-  padding: 14px;
+  padding: 15px;
   background: #3ab87a;
   color: white;
   border: none;
   border-radius: 14px;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 700;
   font-family: 'Nunito', sans-serif;
   cursor: pointer;
@@ -190,18 +147,12 @@ body {
   box-shadow: 0 4px 16px rgba(58, 184, 122, 0.35);
 }
 
-.btn-masuk:hover {
-  background: #2ea569;
-}
+.btn-masuk:hover { background: #2ea569; }
+.btn-masuk:active { transform: scale(0.98); }
 
-.btn-masuk:active {
-  transform: scale(0.98);
-}
-
-/* Register text */
 .register-text {
   text-align: center;
-  font-size: 13.5px;
+  font-size: 14px;
   color: #888;
   margin-top: 16px;
 }
@@ -212,18 +163,13 @@ body {
   text-decoration: none;
 }
 
-.register-text a:hover {
-  text-decoration: underline;
-}
-
-/* Divider */
 .divider {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin: 20px 0 16px;
+  margin: 22px 0 16px;
   color: #bbb;
-  font-size: 12.5px;
+  font-size: 13px;
 }
 
 .divider::before,
@@ -234,7 +180,6 @@ body {
   background: #e8e8e8;
 }
 
-/* Social buttons */
 .social-buttons {
   display: flex;
   gap: 12px;
@@ -246,11 +191,11 @@ body {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 11px;
+  padding: 12px;
   border: 1.5px solid #e8e8e8;
   border-radius: 12px;
   background: #fff;
-  font-size: 13.5px;
+  font-size: 14px;
   font-weight: 700;
   font-family: 'Nunito', sans-serif;
   color: #333;
@@ -261,12 +206,4 @@ body {
 .social-btn:hover {
   border-color: #3ab87a;
   background: #f6fdf9;
-}
-
-/* Responsif untuk mobile asli */
-@media (max-width: 480px) {
-  .card {
-    padding: 28px 20px 24px;
-    border-radius: 22px;
-  }
 }
