@@ -1,7 +1,7 @@
 <?php
-$host     = "localhost";
-$user     = "root";
-$password = "";        
+$host = "localhost";
+$user = "root";
+$password = "";
 $database = "db_rbpl";
 
 $conn = mysqli_connect($host, $user, $password, $database);

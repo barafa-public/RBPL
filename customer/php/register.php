@@ -1,23 +1,29 @@
 <?php
-include '../config/koneksi.php';
+session_start();
+include '../../config/connection.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $username = $_POST['username'];
   $alamat = $_POST['alamat'];
   $no_telepon = $_POST['no_telepon'];
   $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+  $confirm = $_POST['confirm_password'];
 
-  $query = "INSERT INTO customers (username, alamat, no_telepon, password)
-              VALUES ('$username', '$alamat', '$no_telepon', '$password')";
-
-  if (mysqli_query($conn, $query)) {
-    header("Location: login.php?status=berhasil");
+  if ($_POST['password'] !== $_POST['confirm_password']) {
+    $error = "Password dan konfirmasi password tidak cocok!";
   } else {
-    echo "Gagal daftar!";
+    $query = "INSERT INTO customers (username, alamat, no_telepon, password)
+                  VALUES ('$username', '$alamat', '$no_telepon', '$password')";
+
+    if (mysqli_query($conn, $query)) {
+      header("Location: login.php?status=berhasil");
+      exit;
+    } else {
+      $error = "Gagal mendaftar, coba lagi!";
+    }
   }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="id">
 
@@ -43,52 +49,59 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <h1 class="title">Daftar Akun Baru</h1>
     <p class="subtitle">Lengkapi data diri Anda untuk mendaftar</p>
 
-    <div class="form-group">
-      <label>Username</label>
-      <div class="input-wrap">
-        <i class="fa-regular fa-user icon-left"></i>
-        <input type="text" placeholder="Buat Username" />
-      </div>
-    </div>
+    <?php if (!empty($error)): ?>
+      <div class="alert-error"><?= $error ?></div>
+    <?php endif; ?>
 
-    <div class="form-group">
-      <label>Alamat</label>
-      <div class="input-wrap">
-        <i class="fa-solid fa-location-dot icon-left"></i>
-        <input type="text" placeholder="Jln.xxx" />
+    <form method="POST">
+      <div class="form-group">
+        <label>Username</label>
+        <div class="input-wrap">
+          <i class="fa-regular fa-user icon-left"></i>
+          <input type="text" name="username" placeholder="Buat Username" required />
+        </div>
       </div>
-    </div>
 
-    <div class="form-group">
-      <label>No. Telepon</label>
-      <div class="input-wrap">
-        <i class="fa-solid fa-phone icon-left"></i>
-        <input type="tel" placeholder="xxxxxxxx" />
+      <div class="form-group">
+        <label>Alamat</label>
+        <div class="input-wrap">
+          <i class="fa-solid fa-location-dot icon-left"></i>
+          <input type="text" name="alamat" placeholder="Jln.xxx" required />
+        </div>
       </div>
-    </div>
 
-    <div class="form-group">
-      <label>Password</label>
-      <div class="input-wrap">
-        <i class="fa-solid fa-lock icon-left"></i>
-        <input type="password" id="passwordInput" placeholder="Minimal 6 karakter" />
-        <i class="fa-regular fa-eye icon-right" id="togglePassword"></i>
+      <div class="form-group">
+        <label>No. Telepon</label>
+        <div class="input-wrap">
+          <i class="fa-solid fa-phone icon-left"></i>
+          <input type="tel" name="no_telepon" placeholder="xxxxxxxx" required />
+        </div>
       </div>
-    </div>
 
-    <div class="form-group">
-      <label>Konfirmasi Password</label>
-      <div class="input-wrap">
-        <i class="fa-solid fa-lock icon-left"></i>
-        <input type="password" id="confirmPasswordInput" placeholder="Ulangi password Anda" />
-        <i class="fa-regular fa-eye icon-right" id="toggleConfirm"></i>
+      <div class="form-group">
+        <label>Password</label>
+        <div class="input-wrap">
+          <i class="fa-solid fa-lock icon-left"></i>
+          <input type="password" name="password" id="passwordInput" placeholder="Minimal 6 karakter" required />
+          <i class="fa-regular fa-eye icon-right" id="togglePassword"></i>
+        </div>
       </div>
-    </div>
 
-    <button class="btn-daftar">Daftar Sekarang</button>
+      <div class="form-group">
+        <label>Konfirmasi Password</label>
+        <div class="input-wrap">
+          <i class="fa-solid fa-lock icon-left"></i>
+          <input type="password" name="confirm_password" id="confirmPasswordInput" placeholder="Ulangi password Anda"
+            required />
+          <i class="fa-regular fa-eye icon-right" id="toggleConfirm"></i>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-daftar">Daftar Sekarang</button>
+    </form>
 
     <p class="login-text">
-      Sudah punya akun? <a href="/customer/php/login.php">Masuk</a>
+      Sudah punya akun? <a href="login.php">Masuk</a>
     </p>
 
   </div>
@@ -105,14 +118,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         icon.classList.replace('fa-eye-slash', 'fa-eye');
       }
     }
-
-    document.getElementById('togglePassword').addEventListener('click', () => {
-      toggleVisibility('passwordInput', 'togglePassword');
-    });
-
-    document.getElementById('toggleConfirm').addEventListener('click', () => {
-      toggleVisibility('confirmPasswordInput', 'toggleConfirm');
-    });
+    document.getElementById('togglePassword').addEventListener('click', () => toggleVisibility('passwordInput', 'togglePassword'));
+    document.getElementById('toggleConfirm').addEventListener('click', () => toggleVisibility('confirmPasswordInput', 'toggleConfirm'));
   </script>
 
 </body>
