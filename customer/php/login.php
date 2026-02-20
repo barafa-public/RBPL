@@ -1,6 +1,6 @@
 <?php
 session_start();
-include '../config/koneksi.php';
+include '../../config/connection.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $username = $_POST['username'];
@@ -14,12 +14,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $_SESSION['username'] = $user['username'];
     $_SESSION['id'] = $user['id'];
     header("Location: dashboard.php");
+    exit;
   } else {
-    echo "Username atau password salah!";
+    $error = "Username atau password salah!";
   }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="id">
 
@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login</title>
-  <link rel="stylesheet" href="/customer/css/login.css" />
+  <link rel="stylesheet" href="../css/login.css" />
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
@@ -45,35 +45,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <h1 class="title">Selamat Datang</h1>
     <p class="subtitle">Masuk ke akun konsumen Anda</p>
 
-    <div class="form-group">
-      <label>Username</label>
-      <div class="input-wrap">
-        <i class="fa-regular fa-user icon-left"></i>
-        <input type="text" placeholder="Masukkan Username" />
-      </div>
-    </div>
+    <?php if (!empty($error)): ?>
+      <div class="alert-error"><?= $error ?></div>
+    <?php endif; ?>
 
-    <div class="form-group">
-      <label>Password</label>
-      <div class="input-wrap">
-        <i class="fa-solid fa-lock icon-left"></i>
-        <input type="password" id="passwordInput" placeholder="Masukkan Password" />
-        <i class="fa-regular fa-eye icon-right" id="togglePassword"></i>
+    <form method="POST">
+      <div class="form-group">
+        <label>Username</label>
+        <div class="input-wrap">
+          <i class="fa-regular fa-user icon-left"></i>
+          <input type="text" name="username" placeholder="Masukkan Username" required />
+        </div>
       </div>
-      <div class="forgot">
-        <a href="#">Lupa Password?</a>
-      </div>
-    </div>
 
-    <button class="btn-masuk"><a href="/customer/php/dashboard.php">Masuk</a></button>
+      <div class="form-group">
+        <label>Password</label>
+        <div class="input-wrap">
+          <i class="fa-solid fa-lock icon-left"></i>
+          <input type="password" name="password" id="passwordInput" placeholder="Masukkan Password" required />
+          <i class="fa-regular fa-eye icon-right" id="togglePassword"></i>
+        </div>
+        <div class="forgot">
+          <a href="#">Lupa Password?</a>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-masuk">Masuk</button>
+    </form>
 
     <p class="register-text">
-      Belum punya akun? <a href="/customer/php/register.php">Daftar Sekarang</a>
+      Belum punya akun? <a href="register.php">Daftar Sekarang</a>
     </p>
 
-    <div class="divider">
-      <span>atau masuk dengan</span>
-    </div>
+    <div class="divider"><span>atau masuk dengan</span></div>
 
     <div class="social-buttons">
       <button class="social-btn">
@@ -91,13 +95,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <script>
     document.getElementById('togglePassword').addEventListener('click', function () {
       const input = document.getElementById('passwordInput');
-      const icon = this;
       if (input.type === 'password') {
         input.type = 'text';
-        icon.classList.replace('fa-eye', 'fa-eye-slash');
+        this.classList.replace('fa-eye', 'fa-eye-slash');
       } else {
         input.type = 'password';
-        icon.classList.replace('fa-eye-slash', 'fa-eye');
+        this.classList.replace('fa-eye-slash', 'fa-eye');
       }
     });
   </script>
