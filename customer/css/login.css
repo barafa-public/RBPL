@@ -147,6 +147,11 @@ body {
   box-shadow: 0 4px 16px rgba(58, 184, 122, 0.35);
 }
 
+.btn-masuk a {
+  color: inherit;
+  text-decoration: none;
+}
+
 .btn-masuk:hover { background: #2ea569; }
 .btn-masuk:active { transform: scale(0.98); }
 
