@@ -1,13 +1,35 @@
+<?php
+include '../config/koneksi.php';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  $username = $_POST['username'];
+  $alamat = $_POST['alamat'];
+  $no_telepon = $_POST['no_telepon'];
+  $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+
+  $query = "INSERT INTO customers (username, alamat, no_telepon, password)
+              VALUES ('$username', '$alamat', '$no_telepon', '$password')";
+
+  if (mysqli_query($conn, $query)) {
+    header("Location: login.php?status=berhasil");
+  } else {
+    echo "Gagal daftar!";
+  }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Daftar Akun Baru</title>
   <link rel="stylesheet" href="../css/register.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
+
 <body>
 
   <div class="card">
@@ -66,7 +88,7 @@
     <button class="btn-daftar">Daftar Sekarang</button>
 
     <p class="login-text">
-      Sudah punya akun? <a href="login.html">Masuk</a>
+      Sudah punya akun? <a href="/customer/php/login.php">Masuk</a>
     </p>
 
   </div>
@@ -94,4 +116,5 @@
   </script>
 
 </body>
+
 </html>

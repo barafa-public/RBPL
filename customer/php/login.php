@@ -1,13 +1,37 @@
+<?php
+session_start();
+include '../config/koneksi.php';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  $username = $_POST['username'];
+  $password = $_POST['password'];
+
+  $query = "SELECT * FROM customers WHERE username='$username'";
+  $result = mysqli_query($conn, $query);
+  $user = mysqli_fetch_assoc($result);
+
+  if ($user && password_verify($password, $user['password'])) {
+    $_SESSION['username'] = $user['username'];
+    $_SESSION['id'] = $user['id'];
+    header("Location: dashboard.php");
+  } else {
+    echo "Username atau password salah!";
+  }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login</title>
   <link rel="stylesheet" href="/customer/css/login.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
+
 <body>
 
   <div class="card">
@@ -41,10 +65,10 @@
       </div>
     </div>
 
-    <button class="btn-masuk"><a href="/customer/html/dashboard.html">Masuk</a></button>
+    <button class="btn-masuk"><a href="/customer/php/dashboard.php">Masuk</a></button>
 
     <p class="register-text">
-      Belum punya akun? <a href="/customer/html/register.html">Daftar Sekarang</a>
+      Belum punya akun? <a href="/customer/php/register.php">Daftar Sekarang</a>
     </p>
 
     <div class="divider">
@@ -53,11 +77,11 @@
 
     <div class="social-buttons">
       <button class="social-btn">
-        <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" width="20"/>
+        <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" width="20" />
         Google
       </button>
       <button class="social-btn">
-        <img src="https://www.svgrepo.com/show/475647/facebook-color.svg" alt="Facebook" width="20"/>
+        <img src="https://www.svgrepo.com/show/475647/facebook-color.svg" alt="Facebook" width="20" />
         Facebook
       </button>
     </div>
@@ -79,4 +103,5 @@
   </script>
 
 </body>
+
 </html>
