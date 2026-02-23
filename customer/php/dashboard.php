@@ -20,7 +20,6 @@ $username = $_SESSION['username'];
 
 <body>
 
-  <!-- Header -->
   <div class="header">
     <h2 class="header-title">Beranda</h2>
     <a href="logout.php" class="btn-logout">
@@ -28,10 +27,8 @@ $username = $_SESSION['username'];
     </a>
   </div>
 
-  <!-- Konten -->
   <div class="content">
 
-    <!-- Kartu Sambutan -->
     <div class="welcome-card">
       <div class="wave-icon">👋</div>
       <h2 class="welcome-name">Halo, <?= htmlspecialchars($username) ?>!</h2>
@@ -40,18 +37,17 @@ $username = $_SESSION['username'];
       <div class="circle circle-2"></div>
     </div>
 
-    <!-- Menu -->
     <div class="menu-list">
 
-      <div class="menu-item" onclick="window.location.href='pesanan.php'">
+      <div class="menu-item" onclick="window.location.href='order.php'">
         <div class="menu-icon green">
           <i class="fa-solid fa-cart-shopping"></i>
         </div>
-        <span class="menu-label">Buat Pesanan Baru</span>
+        <span class="menu-label"><a href="/customer/php/order.php">Buat Pesanan Baru</a></span>
         <i class="fa-solid fa-chevron-right menu-arrow"></i>
       </div>
 
-      <div class="menu-item" onclick="window.location.href='status.php'">
+      <div class="menu-item" onclick="window.location.href='orderStatus.php'">
         <div class="menu-icon yellow">
           <i class="fa-solid fa-box"></i>
         </div>

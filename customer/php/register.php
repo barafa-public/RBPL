@@ -4,19 +4,24 @@ include '../../config/connection.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $username = $_POST['username'];
-  $alamat = $_POST['alamat'];
-  $no_telepon = $_POST['no_telepon'];
+  $address = $_POST['address'];
+  $phone_number = $_POST['phone_number'];
   $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-  $confirm = $_POST['confirm_password'];
 
-  if ($_POST['password'] !== $_POST['confirm_password']) {
+  if (strlen($_POST['password']) < 6) {
+    $error = "Password must be at least 6 characters!";
+  } elseif ($_POST['password'] !== $_POST['confirm_password']) {
     $error = "Password dan konfirmasi password tidak cocok!";
+  } elseif ($phone_number[0] !== '0') {
+    $error = "The first number must be 0!";
+  } elseif (strlen($phone_number) < 10) {
+    $error = "Phone number must be at least 10 digits!";
   } else {
-    $query = "INSERT INTO customers (username, alamat, no_telepon, password)
-                  VALUES ('$username', '$alamat', '$no_telepon', '$password')";
+    $query = "INSERT INTO customers (username, address, phone_number, password)
+                  VALUES ('$username', '$address', '$phone_number', '$password')";
 
     if (mysqli_query($conn, $query)) {
-      header("Location: login.php?status=berhasil");
+      header("Location: login.php?status=success");
       exit;
     } else {
       $error = "Gagal mendaftar, coba lagi!";
@@ -66,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <label>Alamat</label>
         <div class="input-wrap">
           <i class="fa-solid fa-location-dot icon-left"></i>
-          <input type="text" name="alamat" placeholder="Jln.xxx" required />
+          <input type="text" name="address" placeholder="Jln.xxx" required />
         </div>
       </div>
 
@@ -74,7 +79,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <label>No. Telepon</label>
         <div class="input-wrap">
           <i class="fa-solid fa-phone icon-left"></i>
-          <input type="tel" name="no_telepon" placeholder="xxxxxxxx" required />
+          <input type="tel" name="phone_number" id="phone_number" placeholder="08xxxxxxxxx" inputmode="numeric"
+            pattern="0[0-9]{9,12}" minlength="10" maxlength="13" required />
         </div>
       </div>
 
@@ -82,7 +88,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <label>Password</label>
         <div class="input-wrap">
           <i class="fa-solid fa-lock icon-left"></i>
-          <input type="password" name="password" id="passwordInput" placeholder="Minimal 6 karakter" required />
+          <input type="password" name="password" id="passwordInput" placeholder="Minimal 6 karakter" minlength="6"
+            required />
           <i class="fa-regular fa-eye icon-right" id="togglePassword"></i>
         </div>
       </div>
@@ -120,6 +127,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     document.getElementById('togglePassword').addEventListener('click', () => toggleVisibility('passwordInput', 'togglePassword'));
     document.getElementById('toggleConfirm').addEventListener('click', () => toggleVisibility('confirmPasswordInput', 'toggleConfirm'));
+
+    document.getElementById('phone_number').addEventListener('input', function () {
+      this.value = this.value.replace(/[^0-9]/g, '');
+      this.setCustomValidity('');
+    });
+    document.getElementById('phone_number').addEventListener('keydown', function (e) {
+      const allowed = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab', 'Enter'];
+      if (!/[0-9]/.test(e.key) && !allowed.includes(e.key)) e.preventDefault();
+    });
+    document.getElementById('phone_number').addEventListener('blur', function () {
+      const val = this.value;
+      if (val.length > 0 && val[0] !== '0') {
+        this.setCustomValidity('The first number must be 0');
+        this.reportValidity();
+      } else if (val.length > 0 && val.length < 10) {
+        this.setCustomValidity('Phone number must be at least 10 digits');
+        this.reportValidity();
+      } else {
+        this.setCustomValidity('');
+      }
+    });
+
+    // Validasi password minimal 6 karakter
+    document.getElementById('passwordInput').addEventListener('blur', function () {
+      if (this.value.length > 0 && this.value.length < 6) {
+        this.setCustomValidity('Password must be at least 6 characters');
+        this.reportValidity();
+      } else {
+        this.setCustomValidity('');
+      }
+    });
+    document.getElementById('passwordInput').addEventListener('input', function () {
+      this.setCustomValidity('');
+    });
   </script>
 
 </body>
