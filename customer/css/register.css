@@ -139,11 +139,6 @@ body {
   box-shadow: 0 4px 16px rgba(58, 184, 122, 0.35);
 }
 
-.btn-daftar a {
-  color: inherit;
-  text-decoration: none;
-}
-
 .btn-daftar:hover {
   background: #2ea569;
 }
