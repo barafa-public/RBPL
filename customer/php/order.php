@@ -11,6 +11,9 @@ $customer_id = $_SESSION['id'];
 
 $q = mysqli_query($conn, "SELECT * FROM customers WHERE id='$customer_id'");
 $customer = mysqli_fetch_assoc($q);
+
+// Ambil produk dari database
+$product_query = mysqli_query($conn, "SELECT * FROM products");
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -26,7 +29,6 @@ $customer = mysqli_fetch_assoc($q);
 
 <body>
 
-  <!-- Header -->
   <div class="header">
     <button class="btn-back" onclick="window.location.href='dashboard.php'">
       <i class="fa-solid fa-arrow-left"></i>
@@ -42,54 +44,58 @@ $customer = mysqli_fetch_assoc($q);
     <div class="section-card">
       <h3 class="section-title">Gambar Produk</h3>
       <div class="product-grid">
-
-        <div class="product-item">
-          <img src="../img/aquaBox.jpg" alt="Aqua" />
-          <p>Aqua</p>
-        </div>
-
-        <div class="product-item">
-          <img src="../img/leMineralBox.jpg" alt="Le Mineral" />
-          <p>Le Mineral</p>
-        </div>
-
+        <?php while ($p = mysqli_fetch_assoc($product_query)): ?>
+          <div class="product-item">
+            <img src="../img/<?= htmlspecialchars($p['image']) ?>" alt="<?= htmlspecialchars($p['product_name']) ?>"
+            onerror="this.src='https://placehold.co/140x150/e8f5e9/3ab87a?text=Produk'" />
+            <p><?= htmlspecialchars($p['product_name']) ?></p>
+          </div>
+        <?php endwhile; ?>
       </div>
     </div>
 
     <!-- Informasi Pesanan -->
     <div class="section-card">
       <h3 class="section-title">Informasi Pesanan</h3>
+      <form id="orderForm">
+        <div class="form-group">
+          <label>Nama Pemesan</label>
+          <input type="text" value="<?= htmlspecialchars($username) ?>" readonly class="input-readonly" />
+        </div>
 
-      <div class="form-group">
-        <label>Nama Pemesan</label>
-        <input type="text" value="<?= htmlspecialchars($username) ?>" readonly class="input-readonly" />
-      </div>
+        <div class="form-group">
+          <label>Produk</label>
+          <select id="selectProduct" required>
+            <option value="" data-price="0">Nama produk</option>
+            <?php
+            // Re-query karena pointer sudah habis dipakai untuk gambar
+            $product_query2 = mysqli_query($conn, "SELECT * FROM products");
+            while ($p = mysqli_fetch_assoc($product_query2)):
+              ?>
+              <option value="<?= htmlspecialchars($p['product_name']) ?>" data-price="<?= $p['price'] ?>">
+                  <?= htmlspecialchars($p['product_name']) ?> - Rp <?= number_format($p['price'], 0, ',', '.') ?>
+              </option>
+            <?php endwhile; ?>
+          </select>
+        </div>
 
-      <div class="form-group">
-        <label>Produk</label>
-        <select id="selectProduct" required>
-          <option value="" data-price="0">Nama produk</option>
-          <option value="Aqua" data-price="50000">Aqua - Rp 50.000</option>
-          <option value="Le Mineral" data-price="45000">Le Mineral - Rp 45.000</option>
-        </select>
-      </div>
+        <div class="form-group">
+          <label>Jumlah</label>
+          <input type="number" id="inputQuantity" placeholder="Jumlah pesanan (dalam karton)" min="1" required />
+        </div>
 
-      <div class="form-group">
-        <label>Jumlah</label>
-        <input type="number" id="inputQuantity" placeholder="Jumlah pesanan (dalam karton)" min="1" />
-      </div>
-
-      <div class="form-group">
-        <label>Alamat Pengiriman</label>
-        <textarea id="inputAddress" rows="2"><?= htmlspecialchars($customer['address']) ?></textarea>
-      </div>
+        <div class="form-group">
+          <label>Alamat Pengiriman</label>
+          <textarea id="inputAddress" rows="2" required><?= htmlspecialchars($customer['address']) ?></textarea>
+        </div>
+      </form>
     </div>
 
     <!-- Metode Pembayaran -->
     <div class="section-card">
       <h3 class="section-title">Metode Pembayaran</h3>
       <div class="payment-options">
-        <label class="payment-option active">
+        <label class="payment-option">
           <input type="radio" name="payment_method" value="Transfer Bank" checked />
           <span>Transfer Bank</span>
         </label>
@@ -113,36 +119,28 @@ $customer = mysqli_fetch_assoc($q);
       <h3 class="section-title">Ringkasan Pesanan</h3>
       <div class="summary">
         <div class="summary-row">
-          <span class="summary-label">Produk:</span>
-          <span class="summary-value" id="summary-product">-</span>
+          <span>Produk:</span>
+          <span id="summary-product">-</span>
         </div>
         <div class="summary-row">
-          <span class="summary-label">Jumlah:</span>
-          <span class="summary-value" id="summary-quantity">-</span>
+          <span>Jumlah:</span>
+          <span id="summary-quantity">-</span>
         </div>
         <div class="summary-row">
-          <span class="summary-label">Metode Bayar:</span>
-          <span class="summary-value" id="summary-payment">-</span>
+          <span>Metode Bayar:</span>
+          <span id="summary-payment">-</span>
         </div>
       </div>
     </div>
 
   </div>
 
-  <!-- Tombol Fixed Bawah -->
+  <!-- Tombol fixed di bawah -->
   <div class="bottom-bar">
     <button class="btn-order" onclick="createOrder()">Buat Pesanan</button>
   </div>
 
   <script>
-    // Update active class pada metode pembayaran
-    document.querySelectorAll('.payment-option').forEach(label => {
-      label.addEventListener('click', function () {
-        document.querySelectorAll('.payment-option').forEach(l => l.classList.remove('active'));
-        this.classList.add('active');
-      });
-    });
-
     function updateSummary() {
       const product = document.getElementById('selectProduct');
       const quantity = document.getElementById('inputQuantity').value;
