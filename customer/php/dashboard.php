@@ -51,7 +51,7 @@ $username = $_SESSION['username'];
         <div class="menu-icon yellow">
           <i class="fa-solid fa-box"></i>
         </div>
-        <span class="menu-label">Status Pesanan</span>
+        <span class="menu-label"><a href="/customer/php/orderStatus.php">Status Pesanan</a></span>
         <i class="fa-solid fa-chevron-right menu-arrow"></i>
       </div>
 
