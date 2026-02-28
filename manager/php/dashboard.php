@@ -21,7 +21,7 @@ $total_rejected = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as tot
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dashboard Manager</title>
-    <link rel="stylesheet" href="/manager/css/dashboard.css" />
+    <link rel="stylesheet" href="../css/dashboard.css" />
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>

@@ -6,21 +6,29 @@ if (isset($_SESSION['manager'])) {
 }
 include '../../config/connection.php';
 
+$error = '';
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
+    $username = trim($_POST['username']);
+    $password = trim($_POST['password']);
 
-    $query = "SELECT * FROM managers WHERE username='$username'";
-    $result = mysqli_query($conn, $query);
-    $user = mysqli_fetch_assoc($result);
+    $username = mysqli_real_escape_string($conn, $username);
+    $result = mysqli_query($conn, "SELECT * FROM managers WHERE username='$username'");
 
-    if ($user && password_verify($password, $user['password'])) {
-        $_SESSION['manager'] = $user['username'];
-        $_SESSION['manager_id'] = $user['id'];
-        header("Location: dashboard.php");
-        exit;
+    if (!$result) {
+        $error = "Query error: " . mysqli_error($conn);
+    } elseif (mysqli_num_rows($result) === 0) {
+        $error = "Username tidak ditemukan.";
     } else {
-        $error = "Username atau password salah!";
+        $user = mysqli_fetch_assoc($result);
+        if ($password === $user['password']) {
+            $_SESSION['manager'] = $user['username'];
+            $_SESSION['manager_id'] = $user['id'];
+            header("Location: dashboard.php");
+            exit;
+        } else {
+            $error = "Password salah.";
+        }
     }
 }
 ?>
@@ -31,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Portal Manager</title>
-    <link rel="stylesheet" href="/manager/css/login.css" />
+    <link rel="stylesheet" href="../css/login.css" />
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
@@ -53,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <p class="subtitle">Akses dashboard manajemen</p>
 
             <?php if (!empty($error)): ?>
-                <div class="alert-error"><?= $error ?></div>
+                <div class="alert-error"><?= htmlspecialchars($error) ?></div>
             <?php endif; ?>
 
             <form method="POST">
@@ -61,7 +69,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <label>Username</label>
                     <div class="input-wrap">
                         <i class="fa-regular fa-envelope icon-left"></i>
-                        <input type="text" name="username" placeholder="Masukkan Username" required />
+                        <input type="text" name="username" placeholder="Masukkan Username"
+                            value="<?= htmlspecialchars($_POST['username'] ?? '') ?>" required />
                     </div>
                 </div>
 
