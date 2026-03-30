@@ -100,7 +100,7 @@ $total_rejected = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as tot
                 <i class="fa-solid fa-chevron-right menu-arrow"></i>
             </div>
 
-            <div class="menu-item" onclick="window.location.href='employee.php'">
+            <div class="menu-item" onclick="window.location.href='../php/employeeAssignment.php'">
                 <div class="menu-icon blue">
                     <i class="fa-solid fa-users"></i>
                 </div>
@@ -108,7 +108,7 @@ $total_rejected = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as tot
                 <i class="fa-solid fa-chevron-right menu-arrow"></i>
             </div>
 
-            <div class="menu-item" onclick="window.location.href='stock.php'">
+            <div class="menu-item" onclick="window.location.href='../php/stockMonitoring.php'">
                 <div class="menu-icon purple">
                     <i class="fa-solid fa-file-lines"></i>
                 </div>
