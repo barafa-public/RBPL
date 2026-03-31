@@ -9,10 +9,25 @@ include '../../config/connection.php';
 $employee = $_SESSION['employee'];
 $employee_id = $_SESSION['employee_id'];
 
-// Statistik tugas karyawan ini
-$total_tugas = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as total FROM orders WHERE employee_id='$employee_id'"))['total'] ?? 0;
-$tugas_proses = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as total FROM orders WHERE employee_id='$employee_id' AND status='Dikirim'"))['total'] ?? 0;
-$tugas_selesai = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as total FROM orders WHERE employee_id='$employee_id' AND status='Selesai'"))['total'] ?? 0;
+// Tugas = semua order yang pernah ditugaskan (tidak berkurang meski selesai)
+$total_tugas = mysqli_fetch_assoc(mysqli_query($conn, "
+    SELECT COUNT(*) as total FROM orders 
+    WHERE employee_id='$employee_id'
+"))['total'] ?? 0;
+
+// Proses = sedang berjalan (belum selesai)
+$tugas_proses = mysqli_fetch_assoc(mysqli_query($conn, "
+    SELECT COUNT(*) as total FROM orders 
+    WHERE employee_id='$employee_id' 
+    AND status IN ('Dikirim', 'Pengambilan Barang', 'Dalam Pengiriman')
+"))['total'] ?? 0;
+
+// Selesai = sudah selesai dikirim
+$tugas_selesai = mysqli_fetch_assoc(mysqli_query($conn, "
+    SELECT COUNT(*) as total FROM orders 
+    WHERE employee_id='$employee_id' 
+    AND status = 'Selesai'
+"))['total'] ?? 0;
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -43,25 +58,21 @@ $tugas_selesai = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as tota
             <div class="truck-icon">
                 <i class="fa-solid fa-truck"></i>
             </div>
-            <h2 class="welcome-title">Halo,
-                <?= htmlspecialchars($employee) ?>!
-            </h2>
+            <h2 class="welcome-title">Halo, <?= htmlspecialchars($employee) ?>!</h2>
             <p class="welcome-text">Semangat bekerja hari ini</p>
             <div class="circle circle-1"></div>
             <div class="circle circle-2"></div>
         </div>
 
-        <!-- Notifikasi Tugas Baru -->
-        <?php if ($total_tugas > 0): ?>
+        <!-- Notifikasi Tugas Baru (hanya muncul jika masih ada yang aktif) -->
+        <?php if ($tugas_proses > 0): ?>
             <div class="notif-card">
                 <div class="notif-icon">
                     <i class="fa-solid fa-bell"></i>
                 </div>
                 <div class="notif-text">
                     <p class="notif-title">Tugas Baru!</p>
-                    <p class="notif-sub">Anda memiliki
-                        <?= $total_tugas ?> tugas pengiriman
-                    </p>
+                    <p class="notif-sub">Anda memiliki <?= $tugas_proses ?> tugas pengiriman</p>
                 </div>
             </div>
         <?php endif; ?>
@@ -73,25 +84,19 @@ $tugas_selesai = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as tota
             <div class="stat-card">
                 <i class="fa-solid fa-clipboard-list stat-icon green"></i>
                 <p class="stat-label">Tugas</p>
-                <p class="stat-value green">
-                    <?= $total_tugas ?>
-                </p>
+                <p class="stat-value green"><?= $total_tugas ?></p>
             </div>
 
             <div class="stat-card">
                 <i class="fa-solid fa-bolt stat-icon green"></i>
                 <p class="stat-label">Proses</p>
-                <p class="stat-value green">
-                    <?= $tugas_proses ?>
-                </p>
+                <p class="stat-value green"><?= $tugas_proses ?></p>
             </div>
 
             <div class="stat-card">
                 <i class="fa-solid fa-circle-check stat-icon green"></i>
                 <p class="stat-label">Selesai</p>
-                <p class="stat-value green">
-                    <?= $tugas_selesai ?>
-                </p>
+                <p class="stat-value green"><?= $tugas_selesai ?></p>
             </div>
 
         </div>
