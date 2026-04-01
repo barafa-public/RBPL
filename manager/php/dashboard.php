@@ -11,7 +11,7 @@ $manager = $_SESSION['manager'];
 // Statistik dari database
 $total_stock = mysqli_fetch_assoc(mysqli_query($conn, "SELECT SUM(stock) as total FROM products"))['total'] ?? 0;
 $total_orders = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as total FROM orders"))['total'] ?? 0;
-$total_approved = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as total FROM orders WHERE status='Selesai'"))['total'] ?? 0;
+$total_approved = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as total FROM orders WHERE status IN ('Diproses', 'Pengambilan Barang', 'Dalam Pengiriman', 'Dikirim', 'Selesai')"))['total'] ?? 0;
 $total_rejected = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as total FROM orders WHERE status='Dibatalkan'"))['total'] ?? 0;
 ?>
 <!DOCTYPE html>
@@ -40,7 +40,9 @@ $total_rejected = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as tot
 
         <!-- Welcome Card -->
         <div class="welcome-card">
-            <h2 class="welcome-title">Selamat Datang, <?= htmlspecialchars($manager) ?></h2>
+            <h2 class="welcome-title">Selamat Datang,
+                <?= htmlspecialchars($manager) ?>
+            </h2>
             <p class="welcome-text">Monitor dan kelola sistem dengan mudah</p>
             <div class="circle circle-1"></div>
             <div class="circle circle-2"></div>
@@ -53,28 +55,36 @@ $total_rejected = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as tot
             <div class="stat-card">
                 <i class="fa-solid fa-box stat-icon green"></i>
                 <p class="stat-label">Total Stok</p>
-                <p class="stat-value green"><?= number_format($total_stock, 0, ',', '.') ?></p>
+                <p class="stat-value green">
+                    <?= number_format($total_stock, 0, ',', '.') ?>
+                </p>
                 <div class="stat-circle"></div>
             </div>
 
             <div class="stat-card">
                 <i class="fa-solid fa-clipboard-list stat-icon yellow"></i>
                 <p class="stat-label">Pesanan Masuk</p>
-                <p class="stat-value yellow"><?= $total_orders ?></p>
+                <p class="stat-value yellow">
+                    <?= $total_orders ?>
+                </p>
                 <div class="stat-circle"></div>
             </div>
 
             <div class="stat-card">
                 <i class="fa-solid fa-circle-check stat-icon green"></i>
                 <p class="stat-label">Disetujui</p>
-                <p class="stat-value green"><?= $total_approved ?></p>
+                <p class="stat-value green">
+                    <?= $total_approved ?>
+                </p>
                 <div class="stat-circle"></div>
             </div>
 
             <div class="stat-card">
                 <i class="fa-solid fa-circle-xmark stat-icon red"></i>
                 <p class="stat-label">Ditolak</p>
-                <p class="stat-value red"><?= $total_rejected ?></p>
+                <p class="stat-value red">
+                    <?= $total_rejected ?>
+                </p>
                 <div class="stat-circle"></div>
             </div>
 
@@ -96,7 +106,7 @@ $total_rejected = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as tot
                 <div class="menu-icon yellow">
                     <i class="fa-solid fa-clipboard-list"></i>
                 </div>
-                <span class="menu-label">Monitoring Pesanan</span>
+                <span class="menu-label">Monitoring Laporan</span>
                 <i class="fa-solid fa-chevron-right menu-arrow"></i>
             </div>
 
