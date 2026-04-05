@@ -45,15 +45,6 @@ while ($row = mysqli_fetch_assoc($result)) {
     </div>
 
     <div class="content">
-
-        <?php if ($has_shipping): ?>
-                <!-- Notifikasi pengiriman -->
-                <div class="notif-banner">
-                    <span>🔔</span>
-                    <p>Pesanan Anda sedang dalam proses pengiriman</p>
-                </div>
-        <?php endif; ?>
-
         <?php if (empty($orders)): ?>
                 <div class="empty-state">
                     <i class="fa-solid fa-box-open"></i>
