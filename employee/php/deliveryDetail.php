@@ -34,10 +34,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     // Dalam Pengiriman → Selesai
     $ord = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM orders WHERE id='$id'"));
     if (strtolower($ord['payment_method']) === 'cod') {
-      // COD → ke halaman setoran dulu
-      mysqli_query($conn, "UPDATE orders SET status='Selesai' WHERE id='$id' AND employee_id='$employee_id'");
+      // COD → wajib ke halaman setoran dulu, status BELUM diubah
       header("Location: codDeposit.php?id=$id");
     } else {
+      // Non-COD → langsung selesai
       mysqli_query($conn, "UPDATE orders SET status='Selesai' WHERE id='$id' AND employee_id='$employee_id'");
       header("Location: deliverySuccess.php?id=$id");
     }
