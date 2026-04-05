@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
   } elseif ($action === 'selesai') {
     // Dalam Pengiriman → Selesai
     $ord = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM orders WHERE id='$id'"));
-    if (strtolower($ord['payment_method']) === 'cod') {
+    if (stripos($ord['payment_method'], 'cod') !== false) {
       // COD → wajib ke halaman setoran dulu, status BELUM diubah
       header("Location: codDeposit.php?id=$id");
     } else {
