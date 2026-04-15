@@ -47,7 +47,7 @@ $product_query = mysqli_query($conn, "SELECT * FROM products");
         <?php while ($p = mysqli_fetch_assoc($product_query)): ?>
           <div class="product-item">
             <img src="../img/<?= htmlspecialchars($p['image']) ?>" alt="<?= htmlspecialchars($p['product_name']) ?>"
-            onerror="this.src='https://placehold.co/140x150/e8f5e9/3ab87a?text=Produk'" />
+              onerror="this.src='https://placehold.co/140x150/e8f5e9/3ab87a?text=Produk'" />
             <p><?= htmlspecialchars($p['product_name']) ?></p>
           </div>
         <?php endwhile; ?>
@@ -73,7 +73,7 @@ $product_query = mysqli_query($conn, "SELECT * FROM products");
             while ($p = mysqli_fetch_assoc($product_query2)):
               ?>
               <option value="<?= htmlspecialchars($p['product_name']) ?>" data-price="<?= $p['price'] ?>">
-                  <?= htmlspecialchars($p['product_name']) ?> - Rp <?= number_format($p['price'], 0, ',', '.') ?>
+                <?= htmlspecialchars($p['product_name']) ?> - Rp <?= number_format($p['price'], 0, ',', '.') ?>
               </option>
             <?php endwhile; ?>
           </select>
